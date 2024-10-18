@@ -4,9 +4,8 @@ from reportes.models import Reporte
 from .forms import FiltroReporteForm
 import io
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from reportlab.lib.units import inch
 from reportlab.platypus import Table, TableStyle
 
 def buscar_reportes(request):
@@ -50,7 +49,7 @@ def generar_pdf(request, id_estudiante, fecha_emision, concepto_pago):
         p.setFont("Helvetica", 12)
         p.drawString(220, height - 90, concepto_pago)
 
-        data = [['ID Reporte', 'ID Estudiante', 'Fecha Emisión', 'Concepto Pago', 'Valor Pagado', 'Pagado', 'Saldo Pendiente']]  # Encabezados
+        data = [['ID Reporte', 'ID Estudiante', 'Fecha Emisión', 'Concepto Pago', 'Valor Pagado', 'Pagado', 'Saldo Pendiente']]
 
         for reporte in reportes:
             data.append([
