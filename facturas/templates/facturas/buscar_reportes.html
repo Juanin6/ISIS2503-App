@@ -19,41 +19,16 @@
             {{ form.concepto_pago.label_tag }}<br>
             {{ form.concepto_pago }}
         </div>
+        <div></div>
         <button type="submit">Buscar</button>
     </form>
-
-    {% if reportes %}
-    <h2>Resultados</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID Reporte</th>
-                <th>ID Estudiante</th>
-                <th>Fecha Emisión</th>
-                <th>Concepto Pago</th>
-                <th>Valor Pago</th>
-                <th>Pagado</th>
-                <th>Saldo Pendiente</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for reporte in reportes %}
-            <tr>
-                <td>{{ reporte.id }}</td>
-                <td>{{ reporte.id_estudiante }}</td>
-                <td>{{ reporte.fecha_emision }}</td>
-                <td>{{ reporte.concepto_pago }}</td>
-                <td>{{ reporte.valor_pago }}</td>
-                <td>{{ reporte.pagado }}</td>
-                <td>{{ reporte.saldo_pendiente }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{% url 'generar_pdf' id_estudiante=form.cleaned_data.id_estudiante fecha_emision=form.cleaned_data.fecha_emision concepto_pago=form.cleaned_data.concepto_pago %}">Descargar PDF</a>
-    {% endif %}
 </body>
 
+<div style="text-align:center;">
+    <button type="button" class="btn btn-primary waves-effect waves-light"
+            onClick=" window.location.href='/' ">
+        Back
+    </button>
+</div>
 
 {% endblock %}
