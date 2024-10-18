@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'usuarios',
     'reportes',
     'cursos',
+    'facturas'
 ]
 
 MIDDLEWARE = [
@@ -80,10 +81,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME' :'monitoring_db',
-        'USER': 'monitoring_user',
+        'USER': 'monitoring_user', 
         'PASSWORD': 'isis2503',
-        'HOST': '10.128.0.2',
-        'PORT': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
