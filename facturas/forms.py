@@ -20,3 +20,4 @@ class FiltroReporteForm(forms.Form):
         choices=CONCEPTO_PAGO,
         widget=forms.Select
     )
+    
