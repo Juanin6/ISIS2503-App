@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('usuarios.urls')),
     path('', include('reportes.urls')),
     path('', include('facturas.urls')),
+    path('health/', views.health_check, name='health'),
     path('', views.inicio, name='inicio')
     
 ]
