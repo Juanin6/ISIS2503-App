@@ -79,5 +79,42 @@
 
 {% endblock %}
 
+{% block content %}
+    <div class="container content">
+        <div class="page-header-title">
+            <h4 class="page-title">Generar Reporte</h4>
+        </div>
+
+        <form method="GET" action="{% url 'reporte_usuario' %}">
+            <div class="form-group">
+                <label for="correo" class="form-label">Ingresa el correo electrónico del usuario:</label>
+                <input type="email" id="correo" name="correo" class="form-control" placeholder="usuario@correo.com" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Generar Reporte</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <!-- Botón para verificar integridad -->
+            <button type="button" class="btn btn-warning btn-lg" onclick="window.location.href='{% url 'verificar_integridad' %}'">
+                Verificar Integridad
+            </button>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary btn-lg" onClick="window.location.href='/'">
+                Volver
+            </button>
+        </div>
+    </div>
+
+    <!-- Alerta de ataque de integridad -->
+    {% if error_integridad %}
+    <script>
+        alert("{{ error_integridad }}");
+    </script>
+    {% endif %}
+
+    {% endblock %}
+
 </body>
 </html>
