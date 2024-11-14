@@ -111,6 +111,8 @@ def verificar_integridad(request, reporte_id):
     if hash_actual != reporte.hash_integridad:
         # Redirige a una página de error si hay discrepancia
         return render(request, 'facturas/error_integridad.html', {'reporte': reporte})
-    
-    # Si no hay error, muestra una página de éxito
-    return render(request, 'facturas/reporte_integridad_verificada.html', {'reporte': reporte})
+    else:
+        # Log the hashes for debugging
+        print(f"Stored Hash: {reporte.hash_integridad}")
+        print(f"Recalculated Hash: {hash_actual}")
+        return render(request, 'facturas/reporte_integridad_verificada.html', {'reporte': reporte})

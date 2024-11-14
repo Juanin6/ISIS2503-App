@@ -23,5 +23,5 @@ class Reporte(models.Model):
 
     def calcular_hash(self):
         # Genera un hash a partir de los datos importantes del reporte
-        hash_data = f"{self.fecha_emision}{self.concepto_pago}{self.valor_pagado}{self.saldo_pendiente}".encode('utf-8')
+        hash_data = f"{self.concepto_pago}{self.valor_pagado}{self.saldo_pendiente}".encode('utf-8')
         return hashlib.sha256(hash_data).hexdigest()
