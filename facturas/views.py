@@ -10,6 +10,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
+from django.shortcuts import render, redirect, get_object_or_404
 
 def buscar_reportes(request):
     form = FiltroReporteForm(request.GET or None)
@@ -98,3 +99,18 @@ def generar_pdf(request, id_estudiante, fecha_emision, concepto_pago):
         return HttpResponse(buffer, content_type='application/pdf')
 
     return render(request, 'facturas/generar_pdf.html', {'reportes': reportes})
+
+def verificar_integridad(request, reporte_id):
+    # Obtén el reporte específico
+    reporte = get_object_or_404(Reporte, id=reporte_id)
+    
+    # Recalcula el hash basado en los datos actuales
+    hash_actual = reporte.calcular_hash()
+    
+    # Compara el hash actual con el almacenado
+    if hash_actual != reporte.hash_integridad:
+        # Redirige a una página de error si hay discrepancia
+        return render(request, 'facturas/error_integridad.html', {'reporte': reporte})
+    
+    # Si no hay error, muestra una página de éxito
+    return render(request, 'facturas/reporte_integridad_verificada.html', {'reporte': reporte})
