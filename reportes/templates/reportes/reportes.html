@@ -61,6 +61,7 @@
         <h4 class="page-title">Generar Reporte</h4>
     </div>
 
+    <!-- Formulario para generar el reporte -->
     <form method="GET" action="{% url 'reporte_usuario' %}">
         <div class="form-group">
             <label for="correo" class="form-label">Ingresa el correo electrónico del usuario:</label>
@@ -69,15 +70,22 @@
         <button type="submit" class="btn btn-primary btn-lg btn-block">Generar Reporte</button>
     </form>
 
+    <!-- Botón para volver -->
     <div class="text-center">
-        <button type="button" class="btn btn-secondary btn-lg mt-4"
-                onClick="window.location.href='/'">
+        <button type="button" class="btn btn-secondary btn-lg mt-4" onClick="window.location.href='/'">
             Volver
         </button>
     </div>
 </div>
 
 {% endblock %}
+
+<!-- Alerta de integridad -->
+{% if errores_integridad %}
+<script>
+    alert("Se ha detectado un error de integridad en los datos de los reportes. Por favor, revisa los reportes.");
+</script>
+{% endif %}
 
 </body>
 </html>
