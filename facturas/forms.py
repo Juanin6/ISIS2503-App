@@ -2,9 +2,9 @@ from django import forms
 from datetime import datetime
 
 CONCEPTO_PAGO = [
-    ('pension', 'Pensión'),
-    ('matricula', 'Matrícula'),
-    ('extracurriculares', 'Extracurriculares'),
+    ('Pensión', 'Pensión'),
+    ('Matrícula', 'Matrícula'),
+    ('Extracurriculares', 'Extracurriculares'),
 ]
 
 class FiltroReporteForm(forms.Form):
