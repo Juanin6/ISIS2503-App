@@ -12,6 +12,8 @@ from .logic.usuario_logic import get_usuarios, create_usuario
 from .models import Usuario
 from monitoring.auth0backend import getRole
 from django.contrib.auth.decorators import login_required
+import requests
+from django.http import JsonResponse
 
 # Vista para listar usuarios
 @login_required
@@ -34,15 +36,16 @@ def usuario_create(request):
     role=getRole(request)
     if role == "admin":
         if request.method == 'POST':
-            form = UsuarioForm(request.POST)
-            if form.is_valid():
-                create_usuario(form)
-                messages.add_message(request, messages.SUCCESS, 'Successfully created usuario')
-                return HttpResponseRedirect(reverse('usuarioCreate'))
-            else:
-                print(form.errors)
-        else:
-            form = UsuarioForm()
+            # Redirigir la solicitud al microservicio
+            response = requests.post("http://localhost:5001/validate", json=request.POST.dict())
+            
+            if response.status_code == 403:
+                return JsonResponse({"error": "Solicitud maliciosa detectada"}, status=403)
+            
+            # Procesar respuesta del microservicio (si es válida)
+            return JsonResponse(response.json(), status=response.status_code)
+        
+        form = UsuarioForm()
     else:
         return HttpResponse("Unauthorized User")
 
