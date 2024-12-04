@@ -6,8 +6,8 @@ from models import db
 
 def create_app():
     app = FastAPI(
-        docs_url="/places/docs",
-        openapi_url="/places/openapi.json",
+        docs_url="/instituciones/docs",
+        openapi_url="/instituciones/openapi.json",
         redoc_url=None,
     )
 

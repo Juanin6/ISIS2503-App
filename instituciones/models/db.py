@@ -1,18 +1,23 @@
+
 import motor.motor_asyncio
 from pydantic.functional_validators import BeforeValidator
 from typing_extensions import Annotated
 
+# URL de conexión a MongoDB Atlas
 client = motor.motor_asyncio.AsyncIOMotorClient(
-    "mongodb://monitoring_user:isis2503@10.128.0.86:27017?retryWrites=true&w=majority"
+"mongodb+srv://juan:1234@proyectdatabase.pkurozi.mongodb.net/?retryWrites=true&w=majority&appName=ProyectDataBase"
 )
-db = client.get_database("monitoring_db")
-places_collection = db.get_collection("places")
 
+# Especifica el nombre de tu base de datos
+db = client.get_database("MicroServicio")
 
+# Especifica los nombres de las colecciones
+instituciones_collection = db.get_collection("instituciones")
+
+# Función para configurar índices en las colecciones
 async def set_places_db():
-    # Creates a unique index on the code field
-    await places_collection.create_index("code", unique=True)
+    await instituciones_collection.create_index("course", unique=True)
 
-
-# Represents an ObjectId field in the database.
+# Representa un campo ObjectId en la base de datos
 PyObjectId = Annotated[str, BeforeValidator(str)]
+

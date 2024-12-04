@@ -1,55 +1,50 @@
 from fastapi import APIRouter, status, Body
-import logic.places_logic as places_service
-from models.models import Place, PlaceOut, PlaceCollection
+import logic.logic as instituciones_service
+from models.models import Institution, InstitutionOut, InstitutionCollection
 
 router = APIRouter()
-ENDPOINT_NAME = "/places"
-
+ENDPOINT_NAME = "/instituciones"
 
 @router.get(
     "/",
-    response_description="List all places",
-    response_model=PlaceCollection,
+    response_description="List all institutions",
+    response_model=InstitutionCollection,
     status_code=status.HTTP_200_OK,
 )
-async def get_places():
-    return await places_service.get_places()
-
+async def get_institutions():
+    return await instituciones_service.get_institutions()
 
 @router.get(
-    "/{place_code}",
-    response_description="Get a single place by its code",
-    response_model=PlaceOut,
+    "/{institution_id}",
+    response_description="Get a single institution by its ID",
+    response_model=InstitutionOut,
     status_code=status.HTTP_200_OK,
 )
-async def get_place(place_code: str):
-    return await places_service.get_place(place_code)
-
+async def get_institution(institution_id: str):
+    return await instituciones_service.get_institution(institution_id)
 
 @router.post(
     "/",
-    response_description="Create a new place",
-    response_model=PlaceOut,
+    response_description="Create a new institution",
+    response_model=InstitutionOut,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_place(place: Place = Body(...)):
-    return await places_service.create_place(place)
-
+async def create_institution(institution: Institution = Body(...)):
+    return await instituciones_service.create_institution(institution)
 
 @router.put(
-    "/{place_code}",
-    response_description="Update a place",
-    response_model=PlaceOut,
+    "/{institution_id}",
+    response_description="Update an institution",
+    response_model=InstitutionOut,
     status_code=status.HTTP_200_OK,
 )
-async def update_place(place_code: str, place: Place = Body(...)):
-    return await places_service.update_place(place_code, place)
-
+async def update_institution(institution_id: str, institution: Institution = Body(...)):
+    return await instituciones_service.update_institution(institution_id, institution)
 
 @router.delete(
-    "/{place_code}",
-    response_description="Delete a place",
+    "/{institution_id}",
+    response_description="Delete an institution",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-async def delete_place(place_code: str):
-    return await places_service.delete_place(place_code)
+async def delete_institution(institution_id: str):
+    return await instituciones_service.delete_institution(institution_id)
