@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'reportes',
     'cursos',
     'facturas',
+    'facturacion_microservicio'
 ]
 
 MIDDLEWARE = [

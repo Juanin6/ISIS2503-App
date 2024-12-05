@@ -30,6 +30,7 @@ urlpatterns = [
     path('logout_user/', custom_logout, name='logout_user'),
     path(r'', include('django.contrib.auth.urls')),
     path(r'', include('social_django.urls')),
+     path('facturacion/', include('facturacion_microservicio.urls')),
      
 
 ]
