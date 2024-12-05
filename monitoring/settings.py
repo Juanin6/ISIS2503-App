@@ -84,13 +84,9 @@ WSGI_APPLICATION = 'monitoring.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME' :'monitoring_db',
-        'USER': 'monitoring_user',
-        'PASSWORD': 'isis2503',
-        'HOST': '10.128.0.02',
-        'PORT': '',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR + 'db.sqlite3',
     }
 
 }

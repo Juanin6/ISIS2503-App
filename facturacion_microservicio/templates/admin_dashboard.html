@@ -1,11 +1,6 @@
 <h1>Panel de Administración</h1>
 <table>
-    <tr>
-        <th>ID</th>
-        <th>Usuario</th>
-        <th>Factura</th>
-        <th>Fecha</th>
-    </tr>
+    <tr><th>ID</th><th>Usuario</th><th>Total</th><th>Fecha</th></tr>
     {% for factura in facturas %}
     <tr>
         <td>{{ factura.id }}</td>

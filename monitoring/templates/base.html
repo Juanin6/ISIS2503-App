@@ -11,53 +11,45 @@
     <body>
         <br>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
             <nav class="navbar navbar-light bg-light">
                 <a class="navbar-brand" href="/">
                 <img src="/static/media/logo.png" width="45" height="45" alt="">
                 </a>
             </nav>
 
-          <nav class="navbar navbar-light bg-light">
-              <a class="navbar-brand" href="/">
-                  Ofipensiones
-              </a>
-          </nav>
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="/">
+                    Ofipensiones
+                </a>
+            </nav>
 
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/facturas/">Facturas</a>
-                </li>
-            </ul>
-
-              <form class="form-inline my-2 my-lg-0">
-                {% if user.is_authenticated %}
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a style="font-size:120%" class="nav-link">{{ user.username }}</a></li>
-                    <li><a style="font-size:120%; padding-right:20px" class="nav-link" href="/logout_user">Log out</a></li>
-
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/facturas/">Facturas</a>
+                    </li>
                 </ul>
-                {% else %}
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a style="font-size:120%; padding-right:20px" class="navbar-link" href="/login/auth0">Login</a></li>
-                </ul>
-                {% endif %}
-              </form>
 
-          </div>
+                <form class="form-inline my-2 my-lg-0">
+                    {% if user.is_authenticated %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a style="font-size:120%" class="nav-link">{{ user.username }}</a></li>
+                        <li><a style="font-size:120%; padding-right:20px" class="nav-link" href="{% url 'logout' %}">Log out</a></li>
+                    </ul>
+                    {% else %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a style="font-size:120%; padding-right:20px" class="navbar-link" href="{% url 'login' %}">Login</a></li>
+                    </ul>
+                    {% endif %}
+                </form>
+            </div>
         </nav>
 
-
-        <main> 
+        <main>
           <div class="container" style="min-height: 580px;">
-          {% block content %} 
-          {% endblock %} 
+          {% block content %}
+          {% endblock %}
           </div>
-        </main> 
-
+        </main>
     </body>
-
-
 </html>
