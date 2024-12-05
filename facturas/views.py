@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+import requests
 # Create your views here.
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
@@ -11,7 +11,29 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, HttpResponseForbidden
 
+def admin_dashboard(request):
+    if not request.user.is_staff:  # Verificar si es admin
+        return HttpResponseForbidden("Acceso denegado")
+    
+    # Llamada al microservicio Flask
+    response = requests.get('http://127.0.0.1:5000/admin/dashboard/')
+    if response.status_code == 200:
+        return JsonResponse(response.json(), safe=False)
+    else:
+        return JsonResponse({'error': 'Error al comunicarse con el microservicio Flask'}, status=500)
+
+def student_dashboard(request):
+    if request.user.is_staff:  # Verificar que no sea admin
+        return HttpResponseForbidden("Acceso denegado")
+    
+    # Llamada al microservicio Flask
+    response = requests.get('http://127.0.0.1:5000/student/dashboard/')
+    if response.status_code == 200:
+        return JsonResponse(response.json(), safe=False)
+    else:
+        return JsonResponse({'error': 'Error al comunicarse con el microservicio Flask'}, status=500)
 def buscar_reportes(request):
     form = FiltroReporteForm(request.GET or None)
     
