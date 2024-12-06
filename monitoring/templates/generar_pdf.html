@@ -27,16 +27,20 @@
             <td>{{ reporte.pagado }}</td>
             <td>{{ reporte.saldo_pendiente }}</td>
         </tr>
+
+        {% if reporte.id %}
+{% else %}
+    <p>Error: Report ID is missing.</p>
+{% endif %}
         {% endfor %}
     </tbody>
 </table>
-
-<div></div>
 
 <form method="GET" action="">
     <input type="hidden" name="download_pdf" value="1">
     <button type="submit">Descargar PDF</button>
 </form>
+
 
 {% else %}
 <p>No se encontraron reportes para los criterios de búsqueda ingresados.</p>
