@@ -83,3 +83,16 @@ def check_usuario_exists(request, user_id):
     except Usuario.DoesNotExist:
         # Si no existe, devolvemos un error 404
         return JsonResponse({'response':'false'}, status=404)
+
+
+def verificar_admin(request, contrasena_ingresada):
+    # Contraseña almacenada del administrador
+    contrasena_admin = "admin_secreta123"  # Reemplaza con una contraseña segura
+
+    # Verificar si la contraseña ingresada coincide con la del administrador
+    if contrasena_ingresada == contrasena_admin:
+        # Si es correcta, responder con éxito
+        return JsonResponse({"response": "true", "message": "Acceso concedido"})
+    else:
+        # Si es incorrecta, responder con error 403
+        return JsonResponse({"response": "false", "message": "Contraseña incorrecta"}, status=403)
