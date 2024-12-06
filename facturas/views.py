@@ -12,31 +12,51 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Factura, Usuario
+from .models import Reporte
+from usuarios.models import Usuario
+
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 
-# Contraseña de administrador para verificar todas las facturas
-ADMIN_PASSWORD = "admin_password123"  # Cambia esto a un valor seguro
+ADMIN_PASSWORD = "admin_password123"  # Cambia a una contraseña segura
 
 @csrf_exempt
-def ver_facturas(request):
+def ver_reportes(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
 
             # Validar si es administrador
             if "password" in data and data["password"] == ADMIN_PASSWORD:
-                facturas = Factura.objects.all()  # Recuperar todas las facturas
-                facturas_data = [{"id": f.id, "detalle": f.detalle} for f in facturas]
-                return JsonResponse({"response": "true", "facturas": facturas_data}, status=200)
+                reportes = Reporte.objects.all()  # Recuperar todos los reportes
+                reportes_data = [
+                    {
+                        "id": r.id,
+                        "concepto_pago": r.concepto_pago,
+                        "valor_pagado": r.valor_pagado,
+                        "saldo_pendiente": r.saldo_pendiente,
+                        "fecha_emision": r.fecha_emision,
+                        "id_estudiante": r.id_estudiante.id
+                    }
+                    for r in reportes
+                ]
+                return JsonResponse({"response": "true", "reportes": reportes_data}, status=200)
 
             # Validar si es usuario regular
             elif "username" in data and "password" in data:
                 usuario = Usuario.objects.get(username=data["username"], password=data["password"])
-                facturas_usuario = Factura.objects.filter(usuario=usuario)
-                facturas_data = [{"id": f.id, "detalle": f.detalle} for f in facturas_usuario]
-                return JsonResponse({"response": "true", "facturas": facturas_data}, status=200)
+                reportes_usuario = Reporte.objects.filter(id_estudiante=usuario)
+                reportes_data = [
+                    {
+                        "id": r.id,
+                        "concepto_pago": r.concepto_pago,
+                        "valor_pagado": r.valor_pagado,
+                        "saldo_pendiente": r.saldo_pendiente,
+                        "fecha_emision": r.fecha_emision
+                    }
+                    for r in reportes_usuario
+                ]
+                return JsonResponse({"response": "true", "reportes": reportes_data}, status=200)
 
             else:
                 return JsonResponse({"response": "false", "message": "Credenciales incorrectas"}, status=403)
@@ -46,6 +66,10 @@ def ver_facturas(request):
             return JsonResponse({"response": "false", "message": str(e)}, status=500)
     else:
         return JsonResponse({"response": "false", "message": "Método no permitido"}, status=405)
+    
+
+
+
 def admin_dashboard(request):
     if not request.user.is_staff:  # Verificar si es admin
         return HttpResponseForbidden("Acceso denegado")
