@@ -61,7 +61,7 @@
             const mensaje = document.createElement('div');
             mensaje.className = 'alert alert-success';
             mensaje.innerHTML = tipo === 'admin' 
-                ? 'Mostrando todos los reportes disponibles como administrador.'
+                ? 'Mostrando todos los reportes disponibles en su rol.'
                 : 'Mostrando tus reportes personales.';
             reportesContainer.prepend(mensaje);
         }
