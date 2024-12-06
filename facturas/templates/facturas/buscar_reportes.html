@@ -8,7 +8,7 @@
     <script>
         function buscarReportes(tipo) {
             // Obtener credenciales según el tipo de usuario
-            const correo = tipo === 'admin' ? 'admin@example.com' : document.getElementById('username').value;
+            const correo = tipo === 'admin' ? document.getElementById('admin-email').value : document.getElementById('username').value;
             const contrasena = tipo === 'admin' ? document.getElementById('admin-password').value : document.getElementById('user-password').value;
 
             // Mostrar spinner mientras se procesa
@@ -58,17 +58,12 @@
                 reportesContainer.appendChild(div);
             });
 
-            if (tipo === 'admin') {
-                const mensaje = document.createElement('div');
-                mensaje.className = 'alert alert-success';
-                mensaje.innerHTML = 'Mostrando todos los reportes disponibles como administrador.';
-                reportesContainer.prepend(mensaje);
-            } else {
-                const mensaje = document.createElement('div');
-                mensaje.className = 'alert alert-success';
-                mensaje.innerHTML = 'Mostrando tus reportes personales.';
-                reportesContainer.prepend(mensaje);
-            }
+            const mensaje = document.createElement('div');
+            mensaje.className = 'alert alert-success';
+            mensaje.innerHTML = tipo === 'admin' 
+                ? 'Mostrando todos los reportes disponibles como administrador.'
+                : 'Mostrando tus reportes personales.';
+            reportesContainer.prepend(mensaje);
         }
     </script>
 </head>
@@ -82,6 +77,10 @@
             <!-- Sección para Administrador -->
             <div class="col-md-6 mb-4">
                 <h3>Administrador</h3>
+                <div class="form-group">
+                    <label for="admin-email">Correo de Administrador</label>
+                    <input type="text" id="admin-email" class="form-control" placeholder="Ingrese su correo">
+                </div>
                 <div class="form-group">
                     <label for="admin-password">Contraseña de Administrador</label>
                     <input type="password" id="admin-password" class="form-control" placeholder="Ingrese la contraseña">
