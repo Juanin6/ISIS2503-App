@@ -32,4 +32,5 @@ urlpatterns = [
     path(r'', include('social_django.urls')),
      
 
+
 ]
