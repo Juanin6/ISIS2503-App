@@ -29,11 +29,6 @@
         </tr>
 
         {% if reporte.id %}
-    <div class="text-center mt-4">
-        <a href="{% url 'verificar_integridad' reporte.id %}" class="btn btn-warning btn-lg">
-            Verificar Integridad
-        </a>
-    </div>
 {% else %}
     <p>Error: Report ID is missing.</p>
 {% endif %}
