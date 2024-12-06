@@ -12,7 +12,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Reporte
+from reportes.models import Reporte
 from usuarios.models import Usuario
 
 from django.http import JsonResponse, HttpResponseForbidden
