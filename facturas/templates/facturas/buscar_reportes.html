@@ -1,46 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofipensiones - Buscar Reportes</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script>
         function buscarReportes(tipo) {
-            let data;
-            if (tipo === 'admin') {
-                const password = document.getElementById('admin-password').value;
-                data = { password: password };
-            } else {
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('user-password').value;
-                data = { username: username, password: password };
-            }
+            const correo = tipo === 'admin' ? 'admin@example.com' : document.getElementById('username').value;
+            const contrasena = tipo === 'admin' ? document.getElementById('admin-password').value : document.getElementById('user-password').value;
+
+            // Mostrar spinner mientras se procesan los datos
+            const reportesContainer = document.getElementById('reportes');
+            reportesContainer.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Cargando...</span></div></div>';
 
             fetch('/ver-reportes/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ correo: correo, contrasena: contrasena })
             })
             .then(response => response.json())
             .then(data => {
-                const reportesContainer = document.getElementById('reportes');
-                reportesContainer.innerHTML = "";
+                reportesContainer.innerHTML = ""; // Limpiar contenedor
+
                 if (data.response === "true") {
+                    if (data.reportes.length === 0) {
+                        reportesContainer.innerHTML = '<div class="alert alert-info">No se encontraron reportes.</div>';
+                        return;
+                    }
+
                     data.reportes.forEach(reporte => {
                         const div = document.createElement('div');
+                        div.className = 'card mb-3';
                         div.innerHTML = `
-                            <p><strong>Concepto de Pago:</strong> ${reporte.concepto_pago}</p>
-                            <p><strong>Valor Pagado:</strong> ${reporte.valor_pagado}</p>
-                            <p><strong>Saldo Pendiente:</strong> ${reporte.saldo_pendiente}</p>
-                            <p><strong>Fecha de Emisión:</strong> ${reporte.fecha_emision}</p>
-                            <hr>
+                            <div class="card-body">
+                                <p><strong>Concepto de Pago:</strong> ${reporte.concepto_pago}</p>
+                                <p><strong>Valor Pagado:</strong> ${reporte.valor_pagado}</p>
+                                <p><strong>Saldo Pendiente:</strong> ${reporte.saldo_pendiente}</p>
+                                <p><strong>Fecha de Emisión:</strong> ${reporte.fecha_emision}</p>
+                            </div>
                         `;
                         reportesContainer.appendChild(div);
                     });
                 } else {
-                    alert(data.message);
+                    reportesContainer.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                reportesContainer.innerHTML = '<div class="alert alert-danger">Ocurrió un error al procesar la solicitud.</div>';
+            });
         }
     </script>
 </head>
@@ -49,28 +58,34 @@
         <a class="navbar-brand" href="/">Ofipensiones</a>
     </nav>
     <div class="container mt-5">
-        <h1 class="mb-4">Buscar Reportes</h1>
-        <div class="mb-4">
-            <h3>Administrador</h3>
-            <div class="form-group">
-                <label for="admin-password">Contraseña de Administrador</label>
-                <input type="password" id="admin-password" class="form-control">
+        <h1 class="mb-4 text-center">Buscar Reportes</h1>
+        <div class="row">
+            <!-- Sección para Administrador -->
+            <div class="col-md-6 mb-4">
+                <h3>Administrador</h3>
+                <div class="form-group">
+                    <label for="admin-password">Contraseña de Administrador</label>
+                    <input type="password" id="admin-password" class="form-control" placeholder="Ingrese la contraseña">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="buscarReportes('admin')">Buscar como Administrador</button>
             </div>
-            <button class="btn btn-primary" onclick="buscarReportes('admin')">Buscar como Administrador</button>
+
+            <!-- Sección para Usuario -->
+            <div class="col-md-6 mb-4">
+                <h3>Usuario</h3>
+                <div class="form-group">
+                    <label for="username">Correo</label>
+                    <input type="text" id="username" class="form-control" placeholder="Ingrese su correo">
+                </div>
+                <div class="form-group">
+                    <label for="user-password">Contraseña</label>
+                    <input type="password" id="user-password" class="form-control" placeholder="Ingrese su contraseña">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="buscarReportes('usuario')">Buscar como Usuario</button>
+            </div>
         </div>
-        <hr>
-        <div class="mb-4">
-            <h3>Usuario</h3>
-            <div class="form-group">
-                <label for="username">Usuario</label>
-                <input type="text" id="username" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="user-password">Contraseña</label>
-                <input type="password" id="user-password" class="form-control">
-            </div>
-            <button class="btn btn-primary" onclick="buscarReportes('usuario')">Buscar como Usuario</button>
-        </div>
+
+        <!-- Contenedor para mostrar reportes -->
         <div id="reportes" class="mt-5">
             <!-- Aquí se mostrarán los reportes -->
         </div>
