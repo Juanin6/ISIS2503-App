@@ -89,6 +89,17 @@ def buscar_reportes(request):
 
     return render(request, 'facturas/buscar_reportes.html', {'form': form, 'previous_page': ""})
 
+def buscar_reportes2(request):
+    form = FiltroReporteForm(request.GET or None)
+    
+    if form.is_valid():
+        id_estudiante = form.cleaned_data['id_estudiante']
+        fecha_emision = form.cleaned_data['fecha_emision']
+        concepto_pago = form.cleaned_data['concepto_pago']
+
+        return redirect('generar_pdf', id_estudiante=id_estudiante, fecha_emision=fecha_emision, concepto_pago=concepto_pago)
+
+    return render(request, 'facturas/buscar_reportes_pdf.html', {'form': form, 'previous_page': ""})
 def generar_pdf(request, id_estudiante, fecha_emision, concepto_pago):
     reportes = Reporte.objects.filter(
         id_estudiante=id_estudiante,
