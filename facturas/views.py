@@ -20,6 +20,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 ADMIN_PASSWORD = "admin_password123"  # Cambia a una contraseña segura
 
+
+@csrf_exempt
 def ver_reportes(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -28,37 +30,24 @@ def ver_reportes(request):
 
         if correo and contrasena:
             try:
-                # Buscar al usuario por correo y contraseña
                 usuario = Usuario.objects.get(correo=correo, contrasena=contrasena)
                 
                 if usuario.tipoUsuario == "admin":
-                    # Validación para administrador
                     reportes = Reporte.objects.all()
-                    reportes_data = [
-                        {
-                            'concepto_pago': r.concepto_pago,
-                            'valor_pagado': r.valor_pagado,
-                            'saldo_pendiente': r.saldo_pendiente,
-                            'fecha_emision': r.fecha_emision.strftime('%Y-%m-%d'),
-                        } for r in reportes
-                    ]
-                    return JsonResponse({'response': 'true', 'tipo': 'admin', 'reportes': reportes_data})
-                
                 elif usuario.tipoUsuario == "estudiante":
-                    # Validación para estudiantes
                     reportes = Reporte.objects.filter(id_estudiante=usuario)
-                    reportes_data = [
-                        {
-                            'concepto_pago': r.concepto_pago,
-                            'valor_pagado': r.valor_pagado,
-                            'saldo_pendiente': r.saldo_pendiente,
-                            'fecha_emision': r.fecha_emision.strftime('%Y-%m-%d'),
-                        } for r in reportes
-                    ]
-                    return JsonResponse({'response': 'true', 'tipo': 'usuario', 'reportes': reportes_data})
-                
                 else:
                     return JsonResponse({'response': 'false', 'message': 'Tipo de usuario no reconocido'}, status=403)
+                
+                reportes_data = [
+                    {
+                        'concepto_pago': r.concepto_pago,
+                        'valor_pagado': r.valor_pagado,
+                        'saldo_pendiente': r.saldo_pendiente,
+                        'fecha_emision': r.fecha_emision.strftime('%Y-%m-%d'),
+                    } for r in reportes
+                ]
+                return JsonResponse({'response': 'true', 'tipo': usuario.tipoUsuario, 'reportes': reportes_data})
             
             except Usuario.DoesNotExist:
                 return JsonResponse({'response': 'false', 'message': 'Credenciales inválidas'}, status=401)
@@ -66,7 +55,6 @@ def ver_reportes(request):
             return JsonResponse({'response': 'false', 'message': 'Credenciales no proporcionadas'}, status=400)
     
     return JsonResponse({'response': 'false', 'message': 'Método no permitido'}, status=405)
-
 
 def admin_dashboard(request):
     if not request.user.is_staff:  # Verificar si es admin
