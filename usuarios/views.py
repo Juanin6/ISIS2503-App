@@ -10,54 +10,39 @@ from django.urls import reverse
 from .forms import UsuarioForm
 from .logic.usuario_logic import get_usuarios, create_usuario
 from .models import Usuario
-from monitoring.auth0backend import getRole
-from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 # Vista para listar usuarios
-@login_required
 def usuario_list(request):
-    role = getRole(request)
-    if role == "admin":
-        
-        
+
         usuarios = get_usuarios()
         context = {
             'usuario_list': usuarios
         }
         return render(request, 'Usuario/usuarios.html', context)
-    else:
-        return HttpResponse("Unauthorized User")
 
 # Vista para crear usuarios
-@login_required
-def usuario_create(request):
-    role=getRole(request)
-    if role == "admin":
-        if request.method == 'POST':
-            form = UsuarioForm(request.POST)
-            if form.is_valid():
-                create_usuario(form)
-                messages.add_message(request, messages.SUCCESS, 'Successfully created usuario')
-                return HttpResponseRedirect(reverse('usuarioCreate'))
-            else:
-                print(form.errors)
+def usuario_create(request):  
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST)  
+        if form.is_valid():
+            create_usuario(form)  
+            messages.add_message(request, messages.SUCCESS, 'Successfully created usuario')  
+            return HttpResponseRedirect(reverse('usuarioCreate'))  
         else:
-            form = UsuarioForm()
+            print(form.errors)
     else:
-        return HttpResponse("Unauthorized User")
-
+        form = UsuarioForm()  
 
     context = {
         'form': form,
     }
-    return render(request, 'Usuario/usuarioCreate.html', context)
-
+    return render(request, 'Usuario/usuarioCreate.html', context)  
 # Vista de inicio de sesión
 def login_view(request):
     if request.method == 'POST':
         correo = request.POST.get('correo')
         contrasena = request.POST.get('contrasena')
-        
         try:
             # Autenticar al usuario
             user = Usuario.objects.get(correo=correo, contrasena=contrasena)
@@ -79,17 +64,22 @@ def logout_view(request):
     request.session.flush()  # Elimina todos los datos de la sesión
     return redirect('inicio')
 
-# Dashboard del administrador (lista de usuarios + reportes)
-def admin_dashboard(request):
-    usuarios = Usuario.objects.all()
-    reports = []  # Lógica para obtener reportes (puedes agregar aquí la lógica real)
-    return render(request, 'admin_dashboard.html', {'usuarios': usuarios, 'reports': reports})
 
 # Página de reportes para usuarios normales
 def user_reports(request):
     reports = []  # Lógica para obtener reportes (puedes agregar aquí la lógica real)
     return render(request, 'user_reports.html', {'reports': reports})
 
-def back_view(request):
-    request.session.flush()  # Elimina todos los datos de la sesión
-    return redirect('admin_dashboard')
+
+def check_usuario_exists(request, user_id):
+    try:
+        # Intentamos obtener el usuario con el id
+        usuario = Usuario.objects.get(id=user_id)
+        # Si existe, devolvemos sus datos
+        usuario_data = {
+            "response":'true' 
+        }
+        return JsonResponse(usuario_data)
+    except Usuario.DoesNotExist:
+        # Si no existe, devolvemos un error 404
+        return JsonResponse({'response':'false'}, status=404)
