@@ -13,9 +13,6 @@ class Reporte(models.Model):
     descuento_aplicado = models.IntegerField(default=0)
     saldo_pendiente = models.IntegerField(default=0)
 
-    # Nuevo campo para almacenar el hash de integridad
-    hash_integridad = models.CharField(max_length=64, blank=True, null=True)
-
     def save(self, *args, **kwargs):
         if not self.hash_integridad:
             self.hash_integridad = self.calcular_hash()
