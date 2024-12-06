@@ -78,30 +78,17 @@
             <div class="col-md-6 mb-4">
                 <h3>Administrador</h3>
                 <div class="form-group">
-                    <label for="admin-email">Correo de Administrador</label>
+                    <label for="admin-email">Correo</label>
                     <input type="text" id="admin-email" class="form-control" placeholder="Ingrese su correo">
                 </div>
                 <div class="form-group">
-                    <label for="admin-password">Contraseña de Administrador</label>
+                    <label for="admin-password">Contraseña</label>
                     <input type="password" id="admin-password" class="form-control" placeholder="Ingrese la contraseña">
                 </div>
-                <button class="btn btn-primary btn-block" onclick="buscarReportes('admin')">Buscar como Administrador</button>
+                <button class="btn btn-primary btn-block" onclick="buscarReportes('admin')">Buscar reportes segun rol</button>
             </div>
 
-            <!-- Sección para Usuario -->
-            <div class="col-md-6 mb-4">
-                <h3>Usuario</h3>
-                <div class="form-group">
-                    <label for="username">Correo</label>
-                    <input type="text" id="username" class="form-control" placeholder="Ingrese su correo">
-                </div>
-                <div class="form-group">
-                    <label for="user-password">Contraseña</label>
-                    <input type="password" id="user-password" class="form-control" placeholder="Ingrese su contraseña">
-                </div>
-                <button class="btn btn-primary btn-block" onclick="buscarReportes('usuario')">Buscar como Usuario</button>
-            </div>
-        </div>
+            
 
         <!-- Contenedor para mostrar reportes -->
         <div id="reportes" class="mt-5">
